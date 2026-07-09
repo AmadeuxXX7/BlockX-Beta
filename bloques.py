@@ -1,11 +1,22 @@
 from tkinter import Frame, Label, Entry, Menu
+import time
 
 def setEntry(event):
     entry = event.widget
     new_width = max(3, len(entry.get()))
     entry.config(width=new_width)
 
+def entrynum(texto):
+    if texto in ("", "."):
+        return True
+    try:
+        numero = float(texto)
+        return numero >= 0
+    except ValueError:
+        return False
+
 code = []
+
 
 def clone_block(workspace, counter, block_type, value=""):
     counter["i"] += 1
@@ -16,22 +27,30 @@ def clone_block(workspace, counter, block_type, value=""):
 
     text = Label(block, text=str(block_type), bg="green")
     text.grid(row=0, column=0, pady=5, padx=5)
-    entry = Entry(block, width=3)
+    if block_type == "wait":
+        validacion = block.register(entrynum)
+        entry = Entry(block, width=3, validate="key", validatecommand=(validacion, "%P"))
+    else:
+        entry = Entry(block, width=3)
     entry.insert(0, value)
     entry.grid(row=0, column=1, padx=5)
     entry.bind("<KeyRelease>", setEntry)
+    block_data = (block_type, entry)
+    code.append(block_data)
 
-    code.append(block_type)
-
-    # Click derecho    
+    # Click derecho
     menu = Menu(block, tearoff=0)
-    menu.add_command(label="Eliminar", command=lambda: block.destroy())
+
+    def delete_block():
+        if block_data in code:
+            code.remove(block_data)
+        block.destroy()
+
+    menu.add_command(label="Eliminar", command=delete_block)
     def show_menu(event):
         menu.tk_popup(event.x_root, event.y_root)
     text.bind("<Button-3>", show_menu)
     block.bind("<Button-3>", show_menu)  
-
-
 
 
 def createBlocks(paleta, workspace, i):
@@ -46,12 +65,16 @@ def createBlocks(paleta, workspace, i):
 
     block2 = Frame(paleta, bg="green")
     block2.place(x=20, y=80)
-    text2 = Label(block2, text="input", bg="green")
+    text2 = Label(block2, text="wait", bg="green")
     text2.grid(row=0, column=1, pady=5)
     entry2 = Entry(block2, width=3)
     entry2.grid(row=0, column=2, padx=5)
-    text2.bind("<Button-1>", lambda e: clone_block(workspace, i, "input", entry2.get()))
-
+    text2.bind("<Button-1>", lambda e: clone_block(workspace, i, "wait", entry2.get()))
 
 def Play():
-    print(code)
+    print("Play")
+    for block_type, entry in code:
+        if block_type == "print":
+            print(entry.get())
+        elif block_type == "wait":
+            time.sleep(float(entry.get()))
