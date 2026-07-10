@@ -1,5 +1,4 @@
 from tkinter import Frame, Label, Entry, Menu
-import time
 
 def setEntry(event):
     entry = event.widget
@@ -18,11 +17,11 @@ def entrynum(texto):
 code = []
 
 
-def clone_block(workspace, counter, block_type, value=""):
+def clone_block(consolaDeBloques, counter, block_type, value=""):
     counter["i"] += 1
     i = counter["i"]
 
-    block = Frame(workspace, bg="green")
+    block = Frame(consolaDeBloques, bg="green")
     block.grid(row=i, column=0, padx=5, sticky="w")
 
     text = Label(block, text=str(block_type), bg="green")
@@ -53,28 +52,22 @@ def clone_block(workspace, counter, block_type, value=""):
     block.bind("<Button-3>", show_menu)  
 
 
-def createBlocks(paleta, workspace, i):
+def createBlocks(paleta, consolaDeBloques, i):
+
+    #print()
     block1 = Frame(paleta, bg="green")
     block1.place(x=20, y=20)
     text1 = Label(block1, text="print", bg="green")
     text1.grid(row=0, column=1, pady=5)
     entry1 = Entry(block1, width=3)
     entry1.grid(row=0, column=2, padx=5)
-    text1.bind("<Button-1>", lambda e: clone_block(workspace, i, "print", entry1.get()))
+    text1.bind("<Button-1>", lambda e: clone_block(consolaDeBloques, i, "print", entry1.get()))
 
-
+    #wait()
     block2 = Frame(paleta, bg="green")
     block2.place(x=20, y=80)
     text2 = Label(block2, text="wait", bg="green")
     text2.grid(row=0, column=1, pady=5)
     entry2 = Entry(block2, width=3)
     entry2.grid(row=0, column=2, padx=5)
-    text2.bind("<Button-1>", lambda e: clone_block(workspace, i, "wait", entry2.get()))
-
-def Play():
-    print("Play")
-    for block_type, entry in code:
-        if block_type == "print":
-            print(entry.get())
-        elif block_type == "wait":
-            time.sleep(float(entry.get()))
+    text2.bind("<Button-1>", lambda e: clone_block(consolaDeBloques, i, "wait", entry2.get()))
