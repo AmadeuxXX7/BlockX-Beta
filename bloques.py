@@ -71,3 +71,14 @@ def createBlocks(paleta, consolaDeBloques, i):
     entry2 = Entry(block2, width=3)
     entry2.grid(row=0, column=2, padx=5)
     text2.bind("<Button-1>", lambda e: clone_block(consolaDeBloques, i, "wait", entry2.get()))
+
+#Scripts
+import time, os
+
+def Play(code):
+    print("Play")
+    for block_type, entry in code:
+        if block_type == "print":
+            print(entry.get())
+        elif block_type == "wait":
+            time.sleep(float(entry.get()))
