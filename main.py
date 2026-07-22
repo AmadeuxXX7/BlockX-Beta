@@ -1,7 +1,6 @@
 from tkinter import Tk, Frame, Button
 import tkinter as tk
-from bloques import createBlocks, code
-from codes import Play
+from bloques import createBlocks, code, Play
 
 window = Tk()
 window.title("BlockX Beta")
